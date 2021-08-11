@@ -3,4 +3,8 @@ services:
   js:
     build:
       context: .
-      dockerfile: js.Dockerfile
+      dockerfile: javascript/js.Dockerfile
+  cpp:
+    build:
+      context: .
+      dockerfile: cpp/cpp.Dockerfile
