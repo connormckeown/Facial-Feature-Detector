@@ -1,10 +1,13 @@
 version: "3"
 services:
   js:
+    restart: always
+    ports:
+      - "3000:3000"
     build:
-      context: .
-      dockerfile: javascript/js.Dockerfile
+      context: ./javascript
+      dockerfile: js.Dockerfile
   cpp:
     build:
-      context: .
-      dockerfile: cpp/cpp.Dockerfile
+      context: ./cpp
+      dockerfile: cpp.Dockerfile

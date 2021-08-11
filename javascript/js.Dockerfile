@@ -1,10 +1,11 @@
-FROM node:14-buster
+FROM node:latest
 
-#RUN npm install --build-from-source zeromq@6.0.0-beta.5 
-RUN mkdir -p /app
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-COPY javascript/* .
+COPY package.json /usr/src/app/
 RUN npm install
 
-CMD node hello.js
+COPY . /usr/src/app
+
+CMD [ "node", "app.js" ]
