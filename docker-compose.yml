@@ -12,6 +12,8 @@ services:
       context: ./cpp
       dockerfile: cpp.Dockerfile
   python:
+    network_mode: host
+    
     build:
       context: ./python
       dockerfile: py.Dockerfile
