@@ -11,3 +11,7 @@ services:
     build:
       context: ./cpp
       dockerfile: cpp.Dockerfile
+  python:
+    build:
+      context: ./python
+      dockerfile: py.Dockerfile
