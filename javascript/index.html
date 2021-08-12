@@ -2,12 +2,12 @@
 <html>
 <body>
 
-<p>Click on the "Choose File" button to upload a file:</p>
+    <p>Click on the "Choose File" button to upload an image:</p>
 
-<form action="/action_page.php">
-    <input type="file" id="myFile" name="filename">
-    <input type="submit">
-</form>
+    <form action="/upload" enctype="multipart/form-data" method="POST">
+        <input type="file" name="upload">
+        <input type="submit" value="Upload">
+    </form>
 
 </body>
 </html>
