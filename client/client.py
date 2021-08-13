@@ -5,7 +5,6 @@ import requests
 
 print("hello from client")
 
-
 # sends a GET request to the servers /image 
 # returns a requests.Response Object
 def recvFromServer():
