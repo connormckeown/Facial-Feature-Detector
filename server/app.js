@@ -6,15 +6,18 @@ const formidable = require('formidable')
 const app = express()
 const port = 3000
 
-// clear uploads folder on startup
-try {
-  fs.unlinkSync(__dirname + '/uploads/image.jpg')
-  //file removed
-} catch(err) {
-  console.log("/uploads has no image.jpg to remove")
-}
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 
 app.get('/', (req, res) => {
+  // clear uploads folder on startup
+  try {
+    fs.unlinkSync(__dirname + '/uploads/image.jpg')
+    console.log("deleted image.jpg")
+  } catch(err) {
+    console.log("/uploads has no image.jpg to remove")
+  }
   res.sendFile(__dirname + '/index.html')
 })
 
@@ -44,10 +47,29 @@ app.get('/image', (req, res) => {
       res.sendFile(__dirname + '/uploads/image.jpg')
     } else if (err.code === 'ENOENT') {
       // console.log("image.jpg does not exist")
-      res.send('no image')
+      // res.send('no image')
+      res.send('');
     }
   })
   
+})
+
+
+app.post('/result', (req, res) => {
+  // delete image once prediction is sent back
+  try {
+    fs.unlinkSync(__dirname + '/uploads/image.jpg')
+    console.log("deleted image.jpg")
+  } catch(err) {
+    console.log("/uploads has no image.jpg to remove")
+  }
+
+  console.log("server received prediction")
+  var pred = JSON.stringify(req.body.pred)
+
+  // TODO display prediction
+  
+  res.end()
 })
 
 app.listen(port, () => {

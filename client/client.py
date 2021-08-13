@@ -1,58 +1,44 @@
 import socket
 import os
 from time import sleep
+import requests
 
 print("hello from client")
 
-mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# continuosly bind the socket until it connects
-while mysock.connect_ex(('127.0.0.1', 3000)) != 0:
-    print("pyclient: couldn't bind socket")
-    sleep(10)
-
-
-# function that connects to the server and requests the uploaded image
-def recvImage():
-    cmd = 'GET http://127.0.0.1/image HTTP/1.0\r\n\r\n'.encode()
-    mysock.send(cmd)    # request the image 
-    image_bytes = b""
-
-    # loop over all the bytes received
-    while True:
-        data = mysock.recv(5120)
-        
-        if len(data) < 1:
-            break
-        
-        image_bytes = image_bytes + data
-    
-    pos = image_bytes.find(b"\r\n\r\n")
-    image_bytes = image_bytes[pos+4:]   # trim header
-    return image_bytes
+# sends a GET request to the servers /image 
+# returns a requests.Response Object
+def recvFromServer():
+    url = 'http://localhost:3000/image'
+    res = requests.get(url)
+    while len(res.content) == 0:
+        res = requests.get(url)
+        sleep(5)
+    print('received bytes from server')
+    return res
 
 
-# request from the server until an image is received
+# sends message msg in a JSON to the server as a POST request
+def sendToServer(msg):
+    url = 'http://localhost:3000/result'
+    myobj = {'pred': 'msg'}
+    print(myobj)
+    res = requests.post(url, data = myobj)
+    print("sent bytes to server")
+
+
 while True:
-    img = recvImage()
-    if img.decode(errors='ignore') != 'no image':
-        print("pyclient: recieved image")
+    # receive bytes from server
+    res = recvFromServer()
 
-        # write the bytes to a file
-        fhand = open("image.jpg", "wb")
-        fhand.write(img)
-        fhand.close()
+    # save as an image file
+    fhand = open("image.jpg", "wb")
+    fhand.write(res.content)
+    fhand.close()
 
-        # call cpp program
-        res = os.system('./main sample.jpg')
-        print('res=', res)
+    # call cpp program for a prediction
+    pred = os.system('./main image.jpg') # test with sample.jpg
 
-        # reply to server with classification 
-        
-        break
+    # send prediction to server
+    res = sendToServer(pred)
 
-    print("pyclient: image not received")
-    sleep(10)
-
-
-mysock.close()
