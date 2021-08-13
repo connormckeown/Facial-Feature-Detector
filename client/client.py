@@ -1,7 +1,7 @@
 import socket
 from time import sleep
 
-print("hello from pyclient")
+print("hello from client")
 
 
 # function that connects to the server and requests the uploaded image
@@ -45,8 +45,6 @@ while True:
 
     print("pyclient: image not received")
     sleep(10)
-
-
 
 
 
