@@ -7,13 +7,12 @@ using namespace cv;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    cout << "Hello from cpp container" << endl;
-
-    string image_path = "sample.jpg";
+    string image_path = argv[1];
     Mat img = imread(image_path, IMREAD_COLOR);
 
     if(img.empty()) {
         cout << "cpp: Could not read the image: " << image_path << endl;
+        return 0;
     }
-    
+    cout << "cpp: Successfully read image" << endl;
 }
