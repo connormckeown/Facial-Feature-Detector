@@ -8,14 +8,14 @@
 <body>
 
     <div class="content">
-        <h1>Face Mask Classifier</h1>
-        <h2>Upload an image to be predicted</h2>
+        <h1>Facial Feature Detecter</h1>
+        <h2>Upload an image (jpg)</h2>
     </div>
 
     <form action="/upload" enctype="multipart/form-data" method="POST">
         <input type="file" name="upload" required>
         <p>Drag your file here or click to browse</p>
-        <button type="submit" value="Upload">Upload</button>
+        <button type="submit" value="Upload" onclick="document.getElementById('pred_image').link.style.visibility = 'visible';">Upload</button>
     </form>
 
     
@@ -26,6 +26,26 @@
                 $('form p').text(this.files[0].name + ' uploaded');
             });
         });
+    </script>
+
+    <div class="images">
+        <img id="pred_image"></img>
+    </div>
+
+    <script>
+        var interval = setInterval(function() { 
+            $.ajax({
+                url: "/getImage",
+                type: "GET",
+                success: function(response, status, http) {
+                    if (response) {
+                        // change the img src once the prediction image arrives
+                        document.getElementById("pred_image").src=response;
+                        // clearInterval(interval);
+                        }
+                    }
+            });
+        }, 5000);
     </script>
 
 

@@ -58,5 +58,10 @@ form button:active{
   border:0;
 }
 
-
-
+#pred_image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  
+  margin-top: 500px;
+}

@@ -2,6 +2,7 @@ import socket
 import os
 from time import sleep
 import requests
+import base64
 
 print("hello from client")
 
@@ -18,10 +19,10 @@ def recvFromServer():
 
 
 # sends message msg in a JSON to the server as a POST request
-def sendToServer(msg):
+def sendToServer(data):
     url = 'http://localhost:3000/result'
-    myobj = {'pred': 'msg'}
-    print(myobj)
+    enc_data = base64.b64encode(data)
+    myobj = {'pred': enc_data}
     res = requests.post(url, data = myobj)
     print("sent bytes to server")
 
@@ -36,8 +37,11 @@ while True:
     fhand.close()
 
     # call cpp program for a prediction
-    pred = os.system('./main image.jpg') # test with sample.jpg
+    os.system('./main image.jpg')
+
+    # open the prediction image
+    data = open("pred.jpg", "rb")
 
     # send prediction to server
-    res = sendToServer(pred)
+    res = sendToServer(data.read())
 

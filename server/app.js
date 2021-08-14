@@ -6,17 +6,17 @@ const formidable = require('formidable')
 const app = express()
 const port = 3000
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({ extended: true, limit: '50mb' }))
 
 app.use(express.static(__dirname));
-
 
 
 app.get('/', (req, res) => {
   // clear uploads folder on startup
   try {
     fs.unlinkSync(__dirname + '/uploads/image.jpg')
+    fs.unlinkSync(__dirname + '/pred.jpg')
     console.log("deleted image.jpg")
   } catch(err) {
     console.log("/uploads has no image.jpg to remove")
@@ -49,8 +49,6 @@ app.get('/image', (req, res) => {
       console.log('sending image to pyclient')
       res.sendFile(__dirname + '/uploads/image.jpg')
     } else if (err.code === 'ENOENT') {
-      // console.log("image.jpg does not exist")
-      // res.send('no image')
       res.send('');
     }
   })
@@ -68,11 +66,34 @@ app.post('/result', (req, res) => {
   }
 
   console.log("server received prediction")
-  var pred = JSON.stringify(req.body.pred)
-
-  // TODO display prediction
+  
+  fs.writeFile("pred.jpg", Buffer.from(req.body.pred, 'base64'), 'base64', (err) => {
+    if (err) {
+      console.log(err)
+    }
+  });
   
   res.end()
+})
+
+app.get('/getImage', (req, res) => {
+  fs.stat(__dirname + '/pred.jpg', (err, stat) => {
+    if (err == null) {
+      console.log('sending image to html')
+
+      // delete old input image
+      try {
+        fs.unlinkSync(__dirname + '/uploads/image.jpg')
+        console.log("deleted image.jpg after sending to html")
+      } catch(err) {
+        console.log("/uploads has no image.jpg to remove")
+      }
+
+      res.send('pred.jpg')
+    } else if (err.code === 'ENOENT') {
+      res.end();
+    }
+  })
 })
 
 app.listen(port, () => {
