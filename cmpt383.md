@@ -27,4 +27,4 @@ http://localhost:3000
 ```
 Simply navigate to this url in your browser and upload your image.
 
-(A bug I was having was that images were being uploaded in a weird order. If you run into this, just refresh a few times. The image probably isn't being deleted/created/sent properly in the container)
+(A bug I was having was that images were being uploaded in a weird order. If you run into this, upload the new image and *then* refresh. The image probably isn't being deleted/created/sent properly in the container)
