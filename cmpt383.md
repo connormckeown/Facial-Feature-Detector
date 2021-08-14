@@ -31,4 +31,4 @@ Simply navigate to this url in your browser and upload your image.
 
 ## Example
 
-![Alt text](example.jpg)
+![Alt text](example.png)
